@@ -1,0 +1,32 @@
+{% extends "common/base.html" %}
+{% load static %}
+
+{% block extra_head %}
+{% endblock %}
+
+
+{% block main %}
+
+{# TODO:ここの住所指定は後々修正 #}
+
+
+{% for address in addresses %}
+<form action="" method="POST">
+    {% csrf_token %}
+    <input type="text" name="prefecture" value="{{ address.prefecture }}">
+    <input type="text" name="city"       value="{{ address.city }}">
+    <input type="text" name="address"    value="{{ address.address }}">
+
+    <input type="submit" value="この住所にする">
+</form>
+{% endfor %}
+
+
+
+
+<div>住所を登録する。</div>
+
+{% endblock %}
+
+
+

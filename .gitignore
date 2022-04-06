@@ -1,0 +1,6 @@
+localsettings.py
+local_settings.py
+*.sqlite3
+media
+*.pem
+venv

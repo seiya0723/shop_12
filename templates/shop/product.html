@@ -1,0 +1,17 @@
+{% extends "common/base.html" %}
+
+
+{% block main %}
+
+    <div>{{ product.name }}</div>
+    <div>{{ product.price }}円</div>
+    <div>在庫:{{ product.stock }}個</div>
+
+    <form action="{% url 'shop:product' product.id %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="amount" value="1">
+        <input class="btn btn-outline-success" type="submit" value="カートに入れる">
+    </form>
+
+{% endblock %}
+

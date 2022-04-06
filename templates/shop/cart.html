@@ -1,0 +1,23 @@
+{% extends "common/base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<script src="{% static 'common/js/ajax.js' %}"></script>
+<script src="{% static 'shop/js/cart.js' %}"></script>
+{% endblock %}
+
+
+{% block main %}
+
+<div id="cart_content_area">
+    {% include "shop/cart_content.html" %}
+</div>
+
+
+
+<div>
+    <a href="{% url 'shop:checkout_before' %}">決済する</a>
+</div>
+
+{% endblock %}
+

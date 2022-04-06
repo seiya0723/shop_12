@@ -1,0 +1,28 @@
+{% for cart in carts %}
+<div class="border">
+    <div>商品名:{{ cart.product.name }}</div>
+    <div>価格:{{ cart.product.price }}</div>
+
+    <div>
+        数量:
+        {# 数量の変更処理 #}
+        <form action="{% url 'shop:cart_single' cart.id %}">
+            <input type="hidden" name="product" value="{{ cart.product.id }}">
+            <input type="number" name="amount" value="{{ cart.amount }}">
+            <input class="btn btn-outline-success cart_edit" type="button" value="変更">
+        </form>
+    </div>
+
+    <div>小計:{{ cart.total }}</div>
+
+    {# 削除 #}
+    <form action="{% url 'shop:cart_single' cart.id %}">
+        {% csrf_token %}
+        <input class="btn btn-outline-danger cart_delete" type="button" value="削除">
+    </form>
+
+</div>
+{% endfor %}
+
+<div>合計金額:{{ total }}</div>
+

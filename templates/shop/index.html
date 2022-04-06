@@ -1,0 +1,99 @@
+{% extends "common/base.html" %}
+{% load param_change %}
+{% load static %}
+
+
+{% block extra_head %}
+
+<script src="{% static 'shop/js/url_replace.js' %}"></script>
+{% endblock %}
+
+
+{% block main %}
+
+<a href="{% url 'shop:cart' %}">カートを見る</a>
+
+
+{# TODO:パラメータの両立とフォームの分離 #}
+<form action="" method="GET">
+    <select name="order_by">
+        <option value="">並び替え</option>
+        {% for choice in choices %}
+        <option value="{{ choice.value }}" {% if request.GET.order_by == choice.value %}selected{% endif %}>{{ choice.label }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="text" name="search" placeholder="キーワード検索" value="{{ request.GET.search }}">
+    <input type="submit" value="並び替え">
+</form>
+
+{% for product in products %}
+<div class="border">
+    <div><a href="{% url 'shop:product' product.id %}">{{ product.name }}</a></div>
+    <div>{{ product.price }}</div>
+    <div>在庫数:{{ product.stock }}</div>
+    <form action="{% url 'shop:product' product.id %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="amount" value="1">
+        <input class="btn btn-outline-success" type="submit" value="カートに入れる">
+    </form>
+</div>
+{% endfor %}
+
+
+<ul class="pagination justify-content-center">
+    {% if products.has_previous %}
+    <li class="page-item"><a class="page-link" href="?{% url_replace request 'page' '1' %}">最初のページ</a></li>
+    <li class="page-item"><a class="page-link" href="?{% url_replace request 'page' products.previous_page_number %}">前のページ</a></li>
+    {% else %}
+    <li class="page-item"><a class="page-link">最初のページ</a></li>
+    <li class="page-item"><a class="page-link">前のページ</a></li>
+    {% endif %}
+    <li class="page-item"><a class="page-link">{{ products.number }}</a></li>
+    {% if products.has_next %}
+    <li class="page-item"><a class="page-link" href="?{% url_replace request 'page' products.next_page_number %}">次のページ</a></li>
+    <li class="page-item"><a class="page-link" href="?{% url_replace request 'page' products.paginator.num_pages %}">最後のページ</a></li>
+    {% else %}
+    <li class="page-item"><a class="page-link">次のページ</a></li>
+    <li class="page-item"><a class="page-link">最後のページ</a></li>
+    {% endif %}
+</ul>
+
+{# ここで金額の上限と下限を指定 #}
+
+<h2>下限</h2>
+
+<div>
+    <a href="?{% url_replace request 'min_price' 500   %}">500~</a>
+    <a href="?{% url_replace request 'min_price' 1000  %}">1000~</a>
+    <a href="?{% url_replace request 'min_price' 5000  %}">5000~</a>
+    <a href="?{% url_replace request 'min_price' 10000 %}">10000~</a>
+    <a href="?{% url_replace request 'min_price' 50000 %}">50000~</a>
+</div>
+
+<input class="url_replace" type="text" name="min_price" value="{{ request.GET.min_price }}">
+
+<h2>上限</h2>
+
+<div>
+    <a href="?{% url_replace request 'max_price' 500   %}">~500</a>
+    <a href="?{% url_replace request 'max_price' 1000  %}">~1000</a>
+    <a href="?{% url_replace request 'max_price' 5000  %}">~5000</a>
+    <a href="?{% url_replace request 'max_price' 10000 %}">~10000</a>
+    <a href="?{% url_replace request 'max_price' 50000 %}">~50000</a>
+</div>
+
+<input class="url_replace" type="text" name="max_price" value="{{ request.GET.max_price }}">
+
+
+<!--
+
+    ここに『在庫あり』などで絞り込み
+
+-->
+
+
+
+
+{% endblock %}
+

@@ -1,0 +1,41 @@
+{% extends "common/base.html" %}
+{% load static %}
+
+{% block extra_head %}
+{# <script src="{% static 'common/js/ajax.js' %}"></script> #}
+{% endblock %}
+
+
+{% block main %}
+
+
+<button id="checkout-button" type="button">決済</button>
+
+
+
+<!-- Stripeクラスを使うため、CDNをインストールしておく。 -->
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+
+    //ここにStripeの公開鍵をセットする。
+    var stripe = Stripe( "{{ public_key }}" );
+
+    //決済ボタン押したときのイベント(Stripeへ決済処理する)をセットする。
+    var checkoutButton = document.getElementById('checkout-button');
+
+    checkoutButton.addEventListener('click', function() {
+        stripe.redirectToCheckout({
+          sessionId: '{{ session_id }}'
+        }).then(function (result) {
+            //失敗したときの処理
+            console.log("fail");
+        });
+    });
+
+    console.log("{{ session_id }}");
+
+</script>
+
+{% endblock %}
+
+
